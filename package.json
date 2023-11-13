@@ -1,7 +1,7 @@
 {
-  "name": "Teste Unimed",
+  "name": "teste_unimed",
   "version": "1.0.0",
-  "description": "",
+  "description": "app para teste para vaga de dev",
   "main": "index.js",
   "scripts": {
     "start": "ts-node --transpile-only src/index.ts",
@@ -12,7 +12,7 @@
     "test": "jest"
   },
   "keywords": [],
-  "author": "",
+  "author": "Pedro Maurício Sabóia Rodrigues de Araújo",
   "license": "ISC",
   "devDependencies": {
     "@types/cors": "^2.8.14",
