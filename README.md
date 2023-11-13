@@ -62,11 +62,14 @@
 ### Iniciando a aplicação
 
 - Abrir terminal e digitar:
-  - `$ cd /local_da_pasta_onde_a_API_está_salva;`
-  - `$ npm run migrate:generate`
-  - `$ npm run migrate:run`
-  - `$ npm install`
-  - `$ npm run dev`
+
+```bash
+    cd /local_da_pasta_onde_a_API_está_salva
+    npm run migrate:generate
+    npm run migrate:run
+    npm install
+    npm run dev
+```
 
 > Para os fins dessa documentação será considerado o servidor local de enderço localhost:3004;
 > Para alterar o servidor recomenda-se alterar no arquivo .env em PORT;
