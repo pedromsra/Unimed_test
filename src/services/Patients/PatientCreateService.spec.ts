@@ -150,7 +150,7 @@ describe('Patient Create Service', () => {
         await expect(patientCreateService.execute(patient)).rejects.toEqual('Digite um quarto válido: 1 a 9.')
     })
 
-    it("Name and Date of Birth shouldn't in use by another patient", async() => {
+    it("Name shouldn't in use by another patient", async() => {
         const patient1 = {
             name: "User Teste To Create",
             telephone: "84981015334",
