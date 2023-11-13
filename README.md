@@ -82,7 +82,7 @@
   - Lista de pacientes (index);
   - Visualização de paciente (show);
   - Remoção de paciente (delete);
-- Tambpem foram testadas as [validações de dados](#validação-de-dados) (se o paciente já existe, se o quarto existe, se a ala existe, etc...)
+- Tambem foram testadas as [validações de dados](#validação-de-dados)
 - Os arquivos de testes têm extensão .spec.ts e estão todos na pasta `/src/services`
 - Para executar os testes, uma vez estando na raiz do projeto, digitar no terminal: `npm run test`
 
@@ -94,6 +94,7 @@
 - wing: a ala informada deve ser 'A' ou 'B';
 - room: o quarto informado deve ser 1, 2, 3, 4, 5, 6, 7, 8 ou 9;
 - Na criação/cadastro do paciente, todos os campos são obrigatórios: name, telephone, dateOfBirth, gender, wing e room;
+- Na atualização/exibição/remoção (update/show/delete) é verificado se o id do paciente informado existe em algum paciente cadastrado;
 
 ## Paths
 
@@ -105,6 +106,7 @@
 - info: Adicionar um novo paciente;
 - Body da equisição esperado em JSON (exemplo):
 
+```json
     {
         "name": "Pedro de Araújo",
         "telephone": "5584981015334",
@@ -113,6 +115,7 @@
         "wing": "A",
         "room": 2
     }
+```
 
 - response: status(201);
 
@@ -122,6 +125,7 @@
 - info: modifica as informações do paciente informado;
 - Body da equisição esperado em JSON (exemplo):
 
+```json
     {
         "name": "Pedro Mauricio Saboia Rodrigues de Araujo Fernandes",
         "telephone": "5584981015334",
@@ -130,6 +134,7 @@
         "wing": "A",
         "room": 9
     }
+```
 
 - response: status(200);
 
@@ -147,12 +152,15 @@
   - Todos os pacientes (nenhum valor informado);
 - Body da equisição esperado em JSON (exemplo):
 
+```json
         {
             "name":"Eva"
         }
+```
 
 - response:
 
+```json
     {
         "patientIndex": [
             {
@@ -190,6 +198,7 @@
             }
         ]
     }
+```
 
 #### get (one)
 
@@ -198,6 +207,7 @@
 
 - para <http://localhost:3004/patient/15>, response:
 
+```json
     {
         "id": 15,
         "name": "Eva Beatriz",
@@ -209,6 +219,7 @@
         "CREATED_AT": "2023-11-13T00:14:11.010Z",
         "UPDATED_AT": "2023-11-13T00:14:11.010Z"
     }
+```
 
 #### delete
 
