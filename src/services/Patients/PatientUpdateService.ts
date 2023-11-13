@@ -8,7 +8,6 @@ class PatientUpdateService {
     }
 
     async execute(props: {patient_id: number, name: string, telephone: string, dateOfBirth: string, gender: string, wing: string, room: number} ) {
-
         const patient = await this.patientRepository.findById(props.patient_id);
         
         if (!patient) {
@@ -40,17 +39,13 @@ class PatientUpdateService {
             throw 'Digite uma data de nascimento válida, no formato: DD/MM/AAAA'
         }
 
-        if (props.name && props.dateOfBirth) {
-            const checkName = await this.patientRepository.findByName(props.name)
-            const checkDateOfBirth = await this.patientRepository.findByDateOfBirth(props.dateOfBirth)
-            if (checkName && checkDateOfBirth && checkName.id === checkDateOfBirth.id && checkName.id !== props.patient_id ) {
-                throw "Paciente já cadastrado, com mesmo nome e data de nascimento"
+        if (props.name) {
+            const checkName = await this.patientRepository.findByName(props.name.normalize('NFD').replace(/\p{Mn}/gu, ""))
+            
+            if (checkName && checkName.id !== props.patient_id ) {
+                throw "Paciente já cadastrado com mesmo nome"
             }
         }
-        
-        
-
-
 
         patient.name = props.name ?? patient.name
         patient.telephone = props.telephone ?? patient.telephone
@@ -63,7 +58,7 @@ class PatientUpdateService {
         try {
             patientUpdated = await this.patientRepository.update({
                 patient_id: props.patient_id,
-                name: patient.name,
+                name: patient.name.normalize('NFD').replace(/\p{Mn}/gu, ""),
                 telephone: patient.telephone,
                 dateOfBirth: patient.dateOfBirth,
                 wing: patient.wing,

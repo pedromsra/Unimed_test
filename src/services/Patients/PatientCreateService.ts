@@ -58,17 +58,16 @@ class PatientCreateService {
             throw 'Digite um quarto válido: 1 a 9.'
         }
 
-        const checkName = await this.patientRepository.findByName(props.name);
-        const checkDateOfBirth = await this.patientRepository.findByName(props.name);
+        const checkName = await this.patientRepository.findByName(props.name.normalize('NFD').replace(/\p{Mn}/gu, ""));
         
-        if(checkName && checkDateOfBirth && checkName.id === checkDateOfBirth.id) {
-            throw "Paciente já cadastrado, com mesmo nome e data de nascimento";
+        if(checkName) {
+            throw "Paciente já cadastrado com mesmo nome";
         }
 
         let patientCreated
         
         try {
-            patientCreated = await this.patientRepository.create({name: props.name, telephone: props.telephone, dateOfBirth: props.dateOfBirth, gender: props.gender, wing: props.wing, room: props.room})
+            patientCreated = await this.patientRepository.create({name: props.name.normalize('NFD').replace(/\p{Mn}/gu, ""), telephone: props.telephone, dateOfBirth: props.dateOfBirth, gender: props.gender, wing: props.wing, room: props.room})
         } catch (e) {
             throw e
         }

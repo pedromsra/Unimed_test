@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 
 import PatientCreateService from "../services/Patients/PatientCreateService"
-// import PatientUpdateService from "../services/Patients/PatientUpdateService"
-// import PatientIndexService from "../services/Patients/PatientIndexService";
-// import PatientDeleteService from "../services/Patients/PatientDeleteService";
-// import PatientShowService from "../services/Patients/PatientShowService";
+import PatientUpdateService from "../services/Patients/PatientUpdateService"
+import PatientIndexService from "../services/Patients/PatientIndexService";
+import PatientDeleteService from "../services/Patients/PatientDeleteService";
+import PatientShowService from "../services/Patients/PatientShowService";
 
 import PatientRepository from "../repositories/PatientRepository"
 
@@ -29,48 +29,83 @@ class PatientController {
         return response.status(201).json({id: patient_id, name, telephone, dateOfBirth, gender, wing, room});
     }
 
-    // async update  (request: Request, response: Response) {
+    async update (request: Request, response: Response) {
+        const {name, telephone, dateOfBirth, gender, wing, room} = request.body
 
-    //     const customer_id = Number(request.headers.customer_id)
+        const patient_id = Number(request.params.id)
 
-    //     if (!customer_id) {
-    //         return response.status(400).json({
-    //             status: "error",
-    //             message: "É necessário estar logado para atualizar suas informações"
-    //         })
-    //     }
+        const patientRepository = new PatientRepository();
+        const patientUpdateService = new PatientUpdateService(patientRepository);
+        
+        let patientUpdated
+        try {
+            patientUpdated = await patientUpdateService.execute({patient_id, name, telephone, dateOfBirth, gender, wing, room})
+        } catch (e:any) {
+            return response.status(400).json({
+                status: "error",
+                message: e?.message ? e.message : e
+            })
+        }
 
-    //     const {name, email, telephone, zone, registryType, registryNumber, passwordOld, passwordNew} = request.body;
+        return response.status(201).json({patientUpdated});
+    }
 
-    //     const customerRepository = new CustomerRepository();
-    //     const customerUpdateService = new CustomerUpdateService(customerRepository);
+    async index (request: Request, response: Response) {
+        const {gender, wing, room, name} = request.body
 
-    //     let customerUpdated:any
-    //     try {
-    //         customerUpdated = await customerUpdateService.execute({customer_id, name, email, telephone, zone, registryType, registryNumber, passwordOld, passwordNew});
-    //     } catch (err) {
-    //         return response.status(400).json({
-    //             status: "error",
-    //             message: err
-    //         })
-    //     }
+        const patientRepository = new PatientRepository();
+        const patientIndexService = new PatientIndexService(patientRepository);
+        
+        let patientIndex
+        try {
+            patientIndex = await patientIndexService.execute({gender, wing, room, name})
+        } catch (e:any) {
+            return response.status(400).json({
+                status: "error",
+                message: e?.message ? e.message : e
+            })
+        }
 
-    //     return response.status(201).json(customerUpdated);
-    // }
+        return response.status(201).json({patientIndex});
+    }
 
-    // async delete (request: Request, response: Response) {
-    //     const user_id = request.user.id;
+    async show (request: Request, response: Response) {
+        const patient_id = Number(request.params.id)
 
-    //     if(!user_id) {
-    //         throw new AppError("É necessário estar autenticado para excluir sua conta", 401)
-    //     }
+        const patientRepository = new PatientRepository();
+        const patientShowService = new PatientShowService(patientRepository);
+        
+        let patientShow
+        try {
+            patientShow = await patientShowService.execute({patient_id: patient_id})
+        } catch (e:any) {
+            return response.status(400).json({
+                status: "error",
+                message: e?.message ? e.message : e
+            })
+        }
 
-    //     const customerRepository = new CustomerRepository();
+        return response.status(201).json({patientShow});
+    }
 
-    //     await customerRepository.delete({user_id});
+    async delete (request: Request, response: Response) {
 
-    //     return response.json();
-    // }
+        const patient_id = Number(request.params.id)
+
+        const patientRepository = new PatientRepository();
+        const patientDeleteService = new PatientDeleteService(patientRepository);
+        
+        try {
+            await patientDeleteService.execute(patient_id)
+        } catch (e:any) {
+            return response.status(400).json({
+                status: "error",
+                message: e?.message ? e.message : e
+            })
+        }
+
+        return response.status(201).json();
+    }
 }
 
 export default PatientController;

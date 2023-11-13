@@ -7,7 +7,7 @@ class PatientIndexService {
         this.patientRepository = receivedPatientRepository
     }
     
-    async execute(props?: {wing?: Wings, gender?: Gender, room?: Room}){
+    async execute(props?: {wing?: Wings, gender?: Gender, room?: Room, name?: string}){
 
         const wingList = Object.keys(Wings).filter((item) => isNaN(Number(item)))
         const checkWing = props && props.wing && wingList.includes(props.wing)
@@ -33,7 +33,7 @@ class PatientIndexService {
         let patientIndex
         
         try {
-            patientIndex = props && await this.patientRepository.index({wing: props.wing, gender: props.gender, room: props.room})
+            patientIndex = props && await this.patientRepository.index({wing: props.wing, gender: props.gender, room: props.room, name: props.name})
         } catch (e) {
             throw e
         }

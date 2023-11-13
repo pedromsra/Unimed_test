@@ -8,14 +8,20 @@ class PatientDeleteService {
     }
     
     async execute(patient_id: number){
+
+        const patient = await this.patientRepository.findById(patient_id);
         
+        if(!patient) {
+            throw 'Paciente não encontrado'
+        }
+
         try {
             await this.patientRepository.delete(patient_id)
         } catch (e) {
             throw e
         }
 
-        return ;
+        return 'deleted';
     }
 }
 

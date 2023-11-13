@@ -7,7 +7,9 @@ const patientRoutes = Router();
 const patientController = new PatientController();
 
 patientRoutes.post("/", patientController.create);
-// customerRoutes.put("/", ensureAuthenticated, customersController.update);
-// customerRoutes.delete("/", ensureCustomerAuthenticated, customersController.delete);
+patientRoutes.put("/:id", patientController.update);
+patientRoutes.get("/", patientController.index);
+patientRoutes.get("/:id", patientController.show);
+patientRoutes.delete("/:id", patientController.delete);
 
 export default patientRoutes;

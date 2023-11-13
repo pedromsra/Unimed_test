@@ -171,6 +171,6 @@ describe('Patient Create Service', () => {
 
         await patientCreateService.execute(patient1)
 
-        await expect(patientCreateService.execute(patient2)).rejects.toEqual("Paciente já cadastrado, com mesmo nome e data de nascimento")
+        await expect(patientCreateService.execute(patient2)).rejects.toEqual("Paciente já cadastrado com mesmo nome")
     })
 })

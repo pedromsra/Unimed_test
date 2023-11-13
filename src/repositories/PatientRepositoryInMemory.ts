@@ -61,7 +61,7 @@ import { Gender, Wings, Room, IPatientRepositoryInMemory } from "./definitionfil
 
     }
 
-    index(props?: {wing?: Wings, gender?: Gender, room?: Room}) {
+    index(props?: {wing?: Wings, gender?: Gender, room?: Room, name?: string}) {
 
         if(props && props.wing) {
             return this.patients.filter(patient => patient.wing === props.wing)

@@ -5,6 +5,7 @@ import { IPatientRepository, Wings, Room, Gender } from "./definitionfile";
 class PatientsRepository implements IPatientRepository {
 
     async findById(patient_id: number) {
+        
         let patient
         try {
             patient = await AppDataSource.getRepository(Patient).findOneBy({
@@ -34,12 +35,11 @@ class PatientsRepository implements IPatientRepository {
         let patient
         try {
             patient = await AppDataSource.getRepository(Patient).findOneBy({
-                name: name,
+                name: name.normalize('NFD').replace(/\p{Mn}/gu, ""),
             })
         } catch (e) {
             throw e
         }
-
         return patient;
     }
 
@@ -85,13 +85,12 @@ class PatientsRepository implements IPatientRepository {
                     UPDATED_AT: new Date().toJSON(),
                 })
                 .where('id = :patient_id', { patient_id: props.patient_id })
-                .returning("id")
                 .execute()
         } catch (e) {
             throw e
         }
 
-        return { id: patientId.raw[0].id, UPDATED_AT: new Date() }
+        return patientId
     }
 
     async show(props: {patient_id?: number, name?: string}) {
@@ -113,23 +112,41 @@ class PatientsRepository implements IPatientRepository {
         return patient;
     }
 
-    async index(props: {wing?: Wings, gender?: Gender, room?: Room}) {
+    async index(props: {wing?: Wings, gender?: Gender, room?: Room, name?: string}) {
         let patients
         try {
-            if(props.wing) {
+            if(props.wing && !props.gender && !props.room) {
                 patients = await AppDataSource.getRepository(Patient)
                 .createQueryBuilder('patients')
                 .where('patients.wing = :wing', {wing: props.wing})
                 .getMany()
-            } else if(props.gender) {
+            } else if(props.gender && !props.room && !props.wing) {
                 patients = await AppDataSource.getRepository(Patient)
                 .createQueryBuilder('patients')
                 .where('patients.gender = :gender', {gender: props.gender})
                 .getMany()
-            } else if (props.room) {
+            } else if (props.room && !props.wing && !props.gender) {
                 patients = await AppDataSource.getRepository(Patient)
                 .createQueryBuilder('patients')
                 .where('patients.room = :room', {room: props.room})
+                .getMany()
+            } else if (props.room && props.wing && !props.gender) {
+                patients = await AppDataSource.getRepository(Patient)
+                .createQueryBuilder('patients')
+                .where('patients.room = :room', {room: props.room})
+                .andWhere('patients.wing = :wing', {wing: props.wing})
+                .getMany()
+            } else if (props.room && props.wing && props.gender) {
+                patients = await AppDataSource.getRepository(Patient)
+                .createQueryBuilder('patients')
+                .where('patients.room = :room', {room: props.room})
+                .andWhere('patients.wing = :wing', {wing: props.wing})
+                .andWhere('patients.gender = :gender', {gender: props.gender})
+                .getMany()
+            } else if(!props.wing && !props.gender && !props.room && props.name) {
+                patients = await AppDataSource.getRepository(Patient)
+                .createQueryBuilder('patients')
+                .where('patients.name like :name', {name: `%${props.name}%`})
                 .getMany()
             } else {
                 patients = await AppDataSource.getRepository(Patient)
@@ -153,7 +170,7 @@ class PatientsRepository implements IPatientRepository {
             throw e
         }
 
-        return
+        return 'deleted'
     }
 }
 

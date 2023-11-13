@@ -221,6 +221,6 @@ describe('Patient Update Service', () => {
         }
 
 
-        await expect(patientUpdateService.execute(patient2up)).rejects.toEqual("Paciente já cadastrado, com mesmo nome e data de nascimento")
+        await expect(patientUpdateService.execute(patient2up)).rejects.toEqual("Paciente já cadastrado com mesmo nome")
     })
 })

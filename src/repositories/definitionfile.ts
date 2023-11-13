@@ -28,7 +28,7 @@ type updatePatient = {
     patient_id: number, name: string, telephone: string, dateOfBirth: string, gender: Gender, wing: Wings, room: Room
 }
 
-type indexPatient = { wing?: Wings, gender?: Gender, room?: Room }
+type indexPatient = { wing?: Wings, gender?: Gender, room?: Room, name?: string }
 
 
 export interface IPatientRepository {
