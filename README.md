@@ -65,8 +65,8 @@
 
 ```bash
     cd /local_da_pasta_onde_a_API_está_salva
-    npm run migrate:generate
-    npm run migrate:run
+    npm run migration:generate
+    npm run migration:run
     npm install
     npm run dev
 ```
